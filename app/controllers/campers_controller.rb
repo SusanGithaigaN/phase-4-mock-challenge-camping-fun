@@ -14,8 +14,12 @@ class CampersController < ApplicationController
     end
 
     def create
-        camper = Camper.create(camper_params)
-        render json: camper, status: :created
+        camper = create_camper
+        if camper.save
+            render json: camper, status: :created
+        else
+            render json: { errors: camper.errors.full_messages }, status: :unprocessable_entity
+        end
     end
 
 
@@ -25,11 +29,16 @@ class CampersController < ApplicationController
         Camper.find_by(id: params[:id])
     end
 
-    def error_message
-        render json: { error: "Camper not found"}, status: :unprocessable_entity
+    def create_camper
+        Camper.create(camper_params)
     end
 
     def camper_params
         params.permit(:name, :age)
     end
+
+    def error_message
+        render json: { error: "Camper not found"}, status: :not_found
+    end
+
 end
