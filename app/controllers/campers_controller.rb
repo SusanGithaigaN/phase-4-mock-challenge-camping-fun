@@ -9,7 +9,7 @@ class CampersController < ApplicationController
         if camper.nil?
             error_message
         else
-            render json: camper, include: :activities
+            render json: camper, serializer: CamperSerializer, status: :ok
         end
     end
 
@@ -22,7 +22,7 @@ class CampersController < ApplicationController
         end
     end
 
-
+    
     private
 
     def find_campers
